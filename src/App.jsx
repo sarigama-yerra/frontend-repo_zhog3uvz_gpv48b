@@ -1,70 +1,108 @@
+import Spline from '@splinetool/react-spline'
+
 function App() {
+  const leftPlates = Array.from({ length: 5 })
+  const rightPlates = Array.from({ length: 5 })
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
-      {/* Subtle pattern overlay */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(59,130,246,0.05),transparent_50%)]"></div>
+    <div className="relative min-h-screen w-full overflow-hidden">
+      {/* Background gradient */}
+      <div className="absolute inset-0" aria-hidden>
+        <div className="h-full w-full" style={{
+          background: 'linear-gradient(180deg, #80D8FF 0%, #D48BFF 50%, #FFB180 100%)'
+        }} />
+      </div>
 
-      <div className="relative min-h-screen flex items-center justify-center p-8">
-        <div className="max-w-2xl w-full">
-          {/* Header with Flames icon */}
-          <div className="text-center mb-12">
-            <div className="inline-flex items-center justify-center mb-6">
-              <img
-                src="/flame-icon.svg"
-                alt="Flames"
-                className="w-24 h-24 drop-shadow-[0_0_25px_rgba(59,130,246,0.5)]"
-              />
+      {/* Spline scene layer */}
+      <div className="absolute inset-0">
+        <Spline scene="https://prod.spline.design/UngO8SNLfLcyPG7O/scene.splinecode" style={{ width: '100%', height: '100%' }} />
+      </div>
+
+      {/* Card stack overlay (non-interactive so Spline remains interactive) */}
+      <div className="pointer-events-none relative z-10 flex items-center justify-center min-h-screen">
+        <div className="relative" style={{ perspective: '1200px', perspectiveOrigin: '50% 50%' }}>
+          <div className="animate-float relative" style={{ transformStyle: 'preserve-3d' }}>
+            {/* Center glowing core */}
+            <div className="relative mx-auto" style={{
+              width: 280,
+              height: 360,
+              borderRadius: 24,
+              background: 'radial-gradient(120% 120% at 50% 35%, rgba(255, 238, 140, 0.95) 0%, rgba(255, 201, 71, 0.85) 35%, rgba(255, 155, 64, 0.85) 65%, rgba(255, 138, 76, 0.75) 100%)',
+              boxShadow: '0 0 40px rgba(255, 205, 70, 0.45), 0 0 80px rgba(255, 145, 80, 0.35)'
+            }}>
+              {/* subtle inner glass highlight */}
+              <div className="absolute inset-0 rounded-[24px]" style={{
+                background: 'linear-gradient(180deg, rgba(255,255,255,0.35) 0%, rgba(255,255,255,0.08) 35%, rgba(255,255,255,0) 100%)',
+                mixBlendMode: 'soft-light'
+              }} />
+
+              {/* fake thickness sides */}
+              <div className="absolute inset-0 rounded-[24px]" style={{
+                transform: 'translateZ(-24px)',
+                boxShadow: '0 30px 60px rgba(255, 150, 90, 0.25)'
+              }} />
             </div>
 
-            <h1 className="text-5xl font-bold text-white mb-4 tracking-tight">
-              Flames Blue
-            </h1>
-
-            <p className="text-xl text-blue-200 mb-6">
-              Build applications through conversation
-            </p>
-          </div>
-
-          {/* Instructions */}
-          <div className="bg-slate-800/50 backdrop-blur-sm border border-blue-500/20 rounded-2xl p-8 shadow-xl mb-6">
-            <div className="flex items-start gap-4 mb-6">
-              <div className="flex-shrink-0 w-8 h-8 bg-blue-500 text-white rounded-lg flex items-center justify-center font-bold">
-                1
-              </div>
-              <div>
-                <h3 className="font-semibold text-white mb-1">Describe your idea</h3>
-                <p className="text-blue-200/80 text-sm">Use the chat panel on the left to tell the AI what you want to build</p>
-              </div>
+            {/* Left fanned plates */}
+            <div className="absolute inset-0">
+              {leftPlates.map((_, i) => {
+                const angle = 35 + i * 2.5; // 35° → ~45°
+                const tx = -170 - i * 40;
+                const tz = -40 + i * 20;
+                const delay = 0.15 * i;
+                return (
+                  <div key={`L${i}`} className="plate neon-shadow animate-float-slow" style={{
+                    width: 220,
+                    height: 140,
+                    borderRadius: 18,
+                    position: 'absolute',
+                    top: '50%',
+                    left: '50%',
+                    transformStyle: 'preserve-3d',
+                    transform: `translate(-50%, -50%) translateX(${tx}px) translateZ(${tz}px) rotateY(${angle}deg)`,
+                    background: 'linear-gradient(135deg, #7C3AFF 0%, #FF4FD8 100%)',
+                    boxShadow: '0 0 24px rgba(124, 58, 255, 0.45), 0 0 42px rgba(255, 79, 216, 0.35)',
+                    opacity: 0.95,
+                    animationDelay: `${delay}s`
+                  }} />
+                )
+              })}
             </div>
 
-            <div className="flex items-start gap-4 mb-6">
-              <div className="flex-shrink-0 w-8 h-8 bg-blue-500 text-white rounded-lg flex items-center justify-center font-bold">
-                2
-              </div>
-              <div>
-                <h3 className="font-semibold text-white mb-1">Watch it build</h3>
-                <p className="text-blue-200/80 text-sm">Your app will appear in this preview as the AI generates the code</p>
-              </div>
+            {/* Right fanned plates */}
+            <div className="absolute inset-0">
+              {rightPlates.map((_, i) => {
+                const angle = -35 - i * 2.5; // -35° → ~-45°
+                const tx = 170 + i * 40;
+                const tz = -40 + i * 20;
+                const delay = 0.12 * i + 0.2;
+                return (
+                  <div key={`R${i}`} className="plate neon-shadow animate-float-slow" style={{
+                    width: 220,
+                    height: 140,
+                    borderRadius: 18,
+                    position: 'absolute',
+                    top: '50%',
+                    left: '50%',
+                    transformStyle: 'preserve-3d',
+                    transform: `translate(-50%, -50%) translateX(${tx}px) translateZ(${tz}px) rotateY(${angle}deg)`,
+                    background: 'linear-gradient(135deg, #7C3AFF 0%, #FF4FD8 100%)',
+                    boxShadow: '0 0 24px rgba(124, 58, 255, 0.45), 0 0 42px rgba(255, 79, 216, 0.35)',
+                    opacity: 0.95,
+                    animationDelay: `${delay}s`
+                  }} />
+                )
+              })}
             </div>
-
-            <div className="flex items-start gap-4">
-              <div className="flex-shrink-0 w-8 h-8 bg-blue-500 text-white rounded-lg flex items-center justify-center font-bold">
-                3
-              </div>
-              <div>
-                <h3 className="font-semibold text-white mb-1">Refine and iterate</h3>
-                <p className="text-blue-200/80 text-sm">Continue the conversation to add features and make changes</p>
-              </div>
-            </div>
-          </div>
-
-          {/* Footer */}
-          <div className="text-center">
-            <p className="text-sm text-blue-300/60">
-              No coding required • Just describe what you want
-            </p>
           </div>
         </div>
+      </div>
+
+      {/* Ambient overlays to soften scene (don’t block Spline) */}
+      <div className="pointer-events-none absolute inset-0" aria-hidden>
+        <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-[70vmin] h-[70vmin] rounded-full opacity-40 blur-3xl" style={{
+          background: 'radial-gradient(closest-side, rgba(255, 200, 120, 0.45), rgba(255, 120, 200, 0.25), rgba(128, 216, 255, 0.0))'
+        }} />
       </div>
     </div>
   )

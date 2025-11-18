@@ -22,7 +22,7 @@
   }
 }
 
-/* Custom utility classes for shadcn/ui patterns */
+/* Motion + glow utilities for the 3D stack */
 @layer utilities {
   .animate-in {
     animation-name: animateIn;
@@ -43,4 +43,26 @@
     --tw-exit-translate-x: initial;
     --tw-exit-translate-y: initial;
   }
+
+  .animate-float {
+    animation: floatUpDown 5.2s ease-in-out infinite;
+  }
+
+  .animate-float-slow {
+    animation: floatUpDownSoft 6.2s ease-in-out infinite;
+  }
+
+  .neon-shadow {
+    filter: drop-shadow(0 0 12px rgba(124, 58, 255, 0.45)) drop-shadow(0 0 22px rgba(255, 79, 216, 0.35));
+  }
+}
+
+@keyframes floatUpDown {
+  0%, 100% { transform: translateZ(0) translateY(0); }
+  50% { transform: translateZ(0) translateY(-16px); }
+}
+
+@keyframes floatUpDownSoft {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-12px); }
 }
